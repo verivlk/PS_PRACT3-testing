@@ -30,7 +30,7 @@ class ExpenseService:
         description: str = "",
         expense_date: date = None,
     ) -> Expense:
-        if expense_date == None:
+        if expense_date is None:
             expense_date = date.today()
         expense = Expense(
             id=self._next_id,
