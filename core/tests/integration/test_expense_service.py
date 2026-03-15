@@ -118,13 +118,14 @@ def test_update_expense_partial_fields():
 
 
 def test_total_amount_after_removal():
-    """
-    Verifica que el cálculo del total gastado se actualiza correctamente después de eliminar un gasto.
+    service = create_service()
 
-    - Se crean dos gastos ("Cursos" por 30 y "Internet" por 25).
-    - Se comprueba que la suma inicial del total es 55.
-    - Se elimina el gasto con id 1 (correspondiente al gasto "Cursos").
-    - Se recalcula el total y se espera que sea 25, reflejando únicamente el monto del gasto aún presente.
-    - Este test valida que el método total_amount refleja los cambios en el sistema ante eliminaciones, manteniendo la consistencia de los datos agregados.
-    """
-    ...
+    service.create_expense("Cursos", 30, "", date.today())
+    service.create_expense("Internet", 25, "", date.today())
+
+    total = service.total_amount()
+    assert total == 55
+
+    service.remove_expense(1)
+    updated_total = service.total_amount()
+    assert updated_total == 25
