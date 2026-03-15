@@ -93,18 +93,15 @@ def test_create_multiple_expenses_and_list():
 
 
 def test_remove_expense_reduces_total():
-    """
-    Evalúa el comportamiento del sistema al eliminar un gasto existente:
+    service = create_service()
 
-    - Se generan dos gastos, "Libro" y "Revista", con cantidades distintas.
-    - Se obtienen los gastos actuales y se elimina el primero de ellos utilizando su identificador.
-    - Se verifica lo siguiente tras la eliminación:
-        - Solo queda un gasto en el sistema.
-        - El gasto remanente corresponde efectivamente a "Revista", asegurando que el elemento correcto fue eliminado
-          y que la operación no afecta otros registros.
-    - La prueba valida tanto la integridad de la operación de borrado como la actualización exacta del listado.
-    """
-    ...
+    service.create_expense("Libro", 3, "Mercado", date.today())
+    service.create_expense("Revista", 4, "Supermercado", date.today())
+    expenses = service.list_expenses()
+    service.remove_expense(expenses[0].id)
+    expenses_after = service.list_expenses()
+    assert len(expenses_after) == 1
+    assert expenses_after[0].title == "Revista"
 
 
 def test_update_expense_partial_fields():
