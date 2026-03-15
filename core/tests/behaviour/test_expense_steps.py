@@ -39,6 +39,12 @@ def remove_expense(context, expense_id):
     context["service"].remove_expense(expense_id)
 
 
+@when(parsers.parse("elimino el ultimo gasto"))
+def remove_last_expense(context):
+    last_expense = context["db"]._expenses[-1]  # last from list
+    context["service"].remove_expense(last_expense.id)
+
+
 @then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
 def check_total(context, total):
     assert context["service"].total_amount() == total
