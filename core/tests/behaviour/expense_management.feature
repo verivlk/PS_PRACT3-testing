@@ -48,3 +48,8 @@ Feature: Gestión de gastos
     And añado un gasto de 30 euros llamado Vestido
     And elimino el ultimo gasto
     Then debe haber 2 gastos registrados
+
+  Scenario: Crear un gasto con título vacío generar un error
+    Given un gestor de gastos vacío
+    When intento añadir un gasto de 10 euros sin título
+    Then se genera EmptyTitleError

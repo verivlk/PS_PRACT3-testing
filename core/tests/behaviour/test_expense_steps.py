@@ -5,6 +5,8 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from core.expense_service import ExpenseService
 from core.in_memory_expense_repository import InMemoryExpenseRepository
 
+from core.domain_error import EmptyTitleError, InvalidAmountError
+
 scenarios("./expense_management.feature")
 
 
@@ -45,6 +47,16 @@ def remove_last_expense(context):
     context["service"].remove_expense(last_expense.id)
 
 
+@when(parsers.parse("intento añadir un gasto de {amount:d} euros sin título"))
+def add_expense_without_title(context, amount):
+    try:
+        context["service"].create_expense(
+            title=None, amount=amount, description="", expense_date=date.today()
+        )
+    except EmptyTitleError as e:
+        context["error"] = e
+
+
 @then(parsers.parse("el total de dinero gastado debe ser {total:d} euros"))
 def check_total(context, total):
     assert context["service"].total_amount() == total
@@ -60,3 +72,13 @@ def check_month_total(context, month_name, expected_total):
 def check_expenses_length(context, expenses):
     total = len(context["db"]._expenses)
     assert expenses == total
+
+
+@then(parsers.parse("se genera EmptyTitleError"))
+def check_empty_title_error(context):
+    assert isinstance(context.get("error"), EmptyTitleError)
+
+
+@then(parsers.parse("se genera InvalidAmountError"))
+def check_negative_error(context):
+    assert isinstance(context.get("error"), InvalidAmountError)
