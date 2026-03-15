@@ -5,7 +5,7 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from core.expense_service import ExpenseService
 from core.in_memory_expense_repository import InMemoryExpenseRepository
 
-from core.domain_error import EmptyTitleError, InvalidAmountError
+from core.domain_error import EmptyTitleError, IdNotFoundError, InvalidAmountError
 
 scenarios("./expense_management.feature")
 
@@ -38,7 +38,10 @@ def add_expense(context, amount, title):
 
 @when(parsers.parse("elimino el gasto con id {expense_id:d}"))
 def remove_expense(context, expense_id):
-    context["service"].remove_expense(expense_id)
+    try:
+        context["service"].remove_expense(expense_id)
+    except IdNotFoundError as e:
+        context["error"] = e
 
 
 @when(parsers.parse("elimino el ultimo gasto"))
@@ -82,3 +85,8 @@ def check_empty_title_error(context):
 @then(parsers.parse("se genera InvalidAmountError"))
 def check_negative_error(context):
     assert isinstance(context.get("error"), InvalidAmountError)
+
+
+@then(parsers.parse("se genera IdNotFoundError"))
+def check_id_not_found_error(context):
+    assert isinstance(context.get("error"), IdNotFoundError)

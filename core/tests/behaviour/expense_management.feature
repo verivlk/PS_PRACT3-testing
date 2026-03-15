@@ -53,3 +53,10 @@ Feature: Gestión de gastos
     Given un gestor de gastos vacío
     When intento añadir un gasto de 10 euros sin título
     Then se genera EmptyTitleError
+
+  Scenario: Intentar a eliminar un gasto con id que no existe
+    Given un gestor de gastos vacío
+    When añado un gasto de 10 euros llamado Camiseta
+    And añado un gasto de 30 euros llamado Comida
+    And elimino el gasto con id 5
+    Then se genera IdNotFoundError

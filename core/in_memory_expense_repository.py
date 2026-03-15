@@ -1,3 +1,4 @@
+from core.domain_error import IdNotFoundError
 from core.expense import Expense
 from core.expense_service import ExpenseRepository
 
@@ -18,11 +19,7 @@ class InMemoryExpenseRepository(ExpenseRepository):
             if existing.id == expense_id:
                 del self._expenses[index]
                 return
-
-        """
-        #FIXME
-        implement id not found
-        """
+        raise IdNotFoundError(f"No se encontró un gasto con id {expense_id}")
 
     def get_by_id(self, expense_id: int) -> Expense | None:
         return next(
