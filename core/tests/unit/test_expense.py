@@ -4,6 +4,8 @@ from datetime import date
 from core.expense import Expense
 from core.domain_error import (
     EmptyTitleError,
+    InvalidAmountError,
+    InvalidExpenseDateError,
 )
 
 
@@ -26,17 +28,10 @@ def test_empty_title_raises_error():
 
 
 def test_negative_amount_raises_error():
-    """
-    Prueba que crear un objeto Expense con un valor negativo en el campo 'amount' (por ejemplo, -5)
-    genera la excepción específica InvalidAmountError definida en domain_error.py.
-
-    - Se espera que si se intenta instanciar un gasto con un monto negativo, el constructor de Expense
-      detecte esta situación inválida y lance el error adecuado, impidiendo la creación del objeto.
-    - Esta validación garantiza que no se puedan registrar gastos donde la cantidad gastada sea menor a cero,
-      manteniendo la integridad del dominio de gastos.
-    - Revisar si esta restricción ya está implementada en la clase Expense.
-    """
-    ...
+    with pytest.raises(InvalidAmountError):
+        Expense(
+            id=1, title="Comida", amount=-5, description="", expense_date=date.today()
+        )
 
 
 def test_future_date_raises_error():
