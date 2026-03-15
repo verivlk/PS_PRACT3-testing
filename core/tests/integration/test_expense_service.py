@@ -79,17 +79,17 @@ def test_total_by_month():
 
 
 def test_create_multiple_expenses_and_list():
-    """
-    Verifica que el servicio permite crear múltiples gastos y que estos se almacenan y recuperan correctamente mediante el método list_expenses.
+    service = create_service()
 
-    - Se crea una instancia nueva del servicio de gastos.
-    - Se agregan dos gastos distintos: uno titulado "Pan" con monto 3 y descripción "Mercado", y otro titulado "Leche" con monto 4 y descripción "Supermercado".
-    - Luego, se obtiene el listado de todos los gastos almacenados y se comprueba lo siguiente:
-        - Ambos títulos ("Pan" y "Leche") están presentes en la lista de gastos retornada.
-        - El número total de gastos en el sistema es exactamente dos, lo que verifica que no se sobrescriben ni se duplican registros al crear múltiples gastos.
-    - Este test valida que la función de listado refleja fielmente todos los gastos registrados hasta el momento.
-    """
-    ...
+    service.create_expense("Pan", 3, "Mercado", date.today())
+    service.create_expense("Leche", 4, "Supermercado", date.today())
+
+    all_list = service.list_expenses()
+
+    titles = [e.title for e in all_list]
+    assert "Pan" in titles
+    assert "Leche" in titles
+    assert len(all_list) == 2
 
 
 def test_remove_expense_reduces_total():
