@@ -105,18 +105,16 @@ def test_remove_expense_reduces_total():
 
 
 def test_update_expense_partial_fields():
-    """
-    Comprueba que al actualizar parcialmente un gasto solo cambian los campos especificados y el resto permanece igual.
+    service = create_service()
 
-    - Se crea un gasto titulado "Camiseta" con monto 15 y descripción "Ropa".
-    - Luego, se actualiza únicamente el campo amount, estableciéndolo en 18, usando el ID del gasto.
-    - Finalmente, se recupera el gasto y se verifica lo siguiente:
-        - El campo 'title' permanece igual ("Camiseta").
-        - El campo 'amount' se actualiza correctamente a 18.
-        - El campo 'description' permanece sin cambios ("Ropa").
-    - Este test asegura que el método update_expense respeta la inmutabilidad de los campos no especificados, realizando actualizaciones parciales de manera precisa.
-    """
-    ...
+    expense = service.create_expense("Camiseta", 15, "Ropa", date.today())
+    service.update_expense(expense_id=expense.id, amount=18)
+    updated_expense = service._repository.get_by_id(expense.id)
+
+    assert updated_expense is not None
+    assert updated_expense.title == "Camiseta"
+    assert updated_expense.amount == 18
+    assert updated_expense.description == "Ropa"
 
 
 def test_total_amount_after_removal():
