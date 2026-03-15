@@ -60,3 +60,11 @@ Feature: Gestión de gastos
     And añado un gasto de 30 euros llamado Comida
     And elimino el gasto con id 5
     Then se genera IdNotFoundError
+
+  Scenario: Crear tres gastos de 10, 20, 30 euros y elimino gasto con id 2 la suma son 40 euros
+    Given un gestor de gastos vacío
+    When añado un gasto de 10 euros llamado Camiseta
+    And añado un gasto de 20 euros llamado Comida
+    And añado un gasto de 30 euros llamado Vestido
+    And elimino el gasto con id 2
+    Then el total de dinero gastado debe ser 40 euros
