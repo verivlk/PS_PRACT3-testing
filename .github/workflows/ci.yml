@@ -24,11 +24,11 @@ jobs:
         run: uv pip install pytest pytest-bdd
 
       - name: Install ruff and mypy
-        run: uv pip install ruff mypy pytest pytest-bdd
+        run: uv pip install ruff mypy
 
       - name: Ruff format
-        run: uv ruff format .
+        run: uv run ruff format .
 
       - name: Ruff linter
-        run: uv ruff check . --fix
+        run: uv run ruff check . --fix
 
